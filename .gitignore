@@ -52,3 +52,5 @@ ext/@ScaledFigure/
 src/auxData/Colors.mat
 
 *.mat
+
+.DS_Store
