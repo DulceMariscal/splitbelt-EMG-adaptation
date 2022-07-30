@@ -13,6 +13,11 @@ else
 end
 age=group.getSubjectAgeAtExperimentDate/12;
 
+
+%%
+% cd('/Users/dulcemariscal/Documents/GitHub/Generalization_Regressions/data_reprocess2021')
+% group=adaptationData.createGroupAdaptData({'C0001params','C0002params','C0003params','C0004params','C0005params','C0006params','C0007params', 'C0008params', 'C0009params','C0010params','C0011params','C0012params','C0013params','C0014params','C0015params','C0016params'});
+age=group.getSubjectAgeAtExperimentDate/12;
 %% Define params we care about:
 mOrder={'TA', 'PER', 'SOL', 'LG', 'MG', 'BF', 'SEMB', 'SEMT', 'VM', 'VL', 'RF', 'HIP', 'ADM', 'TFL', 'GLU'};
 nMusc=length(mOrder);
@@ -21,8 +26,9 @@ labelPrefix=fliplr([strcat('f',mOrder) strcat('s',mOrder)]); %To display
 labelPrefixLong= strcat(labelPrefix,['_' type]); %Actual names
 
 %Adding alternative normalization parameters:
-%l2=group.adaptData{1}.data.getLabelsThatMatch('^Norm');
-%controls=controls.renameParams(l2,strcat('N',l2)).normalizeToBaselineEpoch(labelPrefixLong,base,true); %Normalization to max=1 but not min=0
+base=getBaseEpoch;
+l2=group.adaptData{1}.data.getLabelsThatMatch('^Norm');
+group=group.renameParams(l2,strcat('N',l2)).normalizeToBaselineEpoch(labelPrefixLong,base); %Normalization to max=1 but not min=0
 
 %Renaming normalized parameters, for convenience:
 ll=group.adaptData{1}.data.getLabelsThatMatch('^Norm');
@@ -52,7 +58,6 @@ for i=1:length(shortNames)
     eval(['SLA_' shortNames{i} '=aux(:);']);
 end
 clear aux
-
 vars=[shortNames,strcat('SLA_',shortNames), {'age','labels'}];
 save(['../data/' groupName 'EMGsummary'],vars{:})
 end
